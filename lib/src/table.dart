@@ -200,8 +200,11 @@ class _EasyTableState<ROW> extends State<EasyTable<ROW>> {
         },
         onPointerSignal: (pointerSignal) {
           if (pointerSignal is PointerScrollEvent) {
-            _onPointerScroll(pointerSignal, themeMetrics.row.height);
+            _onScroll(pointerSignal.scrollDelta.dy, themeMetrics.row.height);
           }
+        },
+        onPointerPanZoomUpdate: (PointerPanZoomUpdateEvent event) {
+          _onScroll(event.delta.dy, themeMetrics.row.height);
         },
         child: table,
       );
@@ -221,8 +224,8 @@ class _EasyTableState<ROW> extends State<EasyTable<ROW>> {
     return table;
   }
 
-  void _onPointerScroll(PointerScrollEvent event, double rowHeight) {
-    if (event.scrollDelta.dy > 0) {
+  void _onScroll(double deltaY, double rowHeight) {
+    if (deltaY > 0) {
       if (_scrollControllers.vertical.hasClients) {
         double target = math.min(
             _scrollControllers.vertical.position.pixels + rowHeight,
@@ -230,7 +233,7 @@ class _EasyTableState<ROW> extends State<EasyTable<ROW>> {
         _scrollControllers.vertical.animateTo(target,
             duration: const Duration(milliseconds: 30), curve: Curves.ease);
       }
-    } else if (event.scrollDelta.dy < 0) {
+    } else if (deltaY < 0) {
       if (_scrollControllers.vertical.hasClients) {
         double target = math.max(
             _scrollControllers.vertical.position.pixels - rowHeight, 0);

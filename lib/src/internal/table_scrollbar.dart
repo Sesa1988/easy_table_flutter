@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:easy_table/src/theme/scrollbar_theme_data.dart';
 import 'package:easy_table/src/theme/theme.dart';
 import 'package:easy_table/src/theme/theme_data.dart';
@@ -54,7 +56,12 @@ class TableScrollbar extends StatelessWidget {
                 thumbVisibility: true,
                 child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(context)
-                        .copyWith(scrollbars: false),
+                        .copyWith(scrollbars: false, dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                      PointerDeviceKind.invertedStylus,
+                      PointerDeviceKind.trackpad
+                    }),
                     child: SingleChildScrollView(
                         controller: scrollController,
                         scrollDirection: axis,
